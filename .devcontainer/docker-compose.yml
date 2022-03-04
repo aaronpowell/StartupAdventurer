@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  cosmos:
+    image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
+    mem_limit: 3g
+    cpu_count: 2
+    environment:
+      AZURE_COSMOS_EMULATOR_PARTITION_COUNT: 10
+      AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE: "true"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker-host.sock
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        USER_UID: 1000
+        USER_GID: 1000
+
+    init: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker-host.sock
+      - ..:/startupAdventurer:cached
+
+    entrypoint: /usr/local/share/docker-init.sh
+    command: sleep infinity
+    network_mode: service:cosmos

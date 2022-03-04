@@ -1,22 +1,41 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.181.0/containers/docker-from-docker-compose
 {
   "name": "Startup Adventurer",
-  "dockerFile": "Dockerfile",
-  "forwardPorts": [7071, 5500],
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/startupAdventurer",
 
+  // Use this environment variable if you need to bind mount your local source code into a new container.
+  "remoteEnv": {
+    "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}",
+    "NODE_OPTIONS": "--use-openssl-ca"
+  },
+
+  // Set *default* container specific settings.json values on container create.
   "settings": {
     "terminal.integrated.shell.linux": "/bin/bash"
   },
 
+  // Add the IDs of extensions you want installed when the container is created.
   "extensions": [
+    "ms-azuretools.vscode-docker",
     "ms-azuretools.vscode-azurefunctions",
     "ms-azuretools.vscode-azurestaticwebapps",
+    "ms-azuretools.vscode-cosmosdb",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
     "github.vscode-pull-request-github",
+    "visualstudioexptteam.vscodeintellicode",
+    "ms-edgedevtools.vscode-edge-devtools",
+    "ms-vscode.vscode-js-profile-flame",
+    "ms-vsliveshare.vsliveshare-pack",
     "visualstudioexptteam.vscodeintellicode"
   ],
 
-  "postCreateCommand": ". ${NVM_DIR}/nvm.sh && nvm install --lts",
+  "forwardPorts": [8081, 4820],
 
-  "remoteUser": "vscode"
+  "remoteUser": "vscode",
+
+  "postCreateCommand": "sh ./.devcontainer/startup.sh"
 }
